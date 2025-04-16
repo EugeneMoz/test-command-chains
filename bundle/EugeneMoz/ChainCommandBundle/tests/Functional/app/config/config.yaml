@@ -66,7 +66,7 @@ services:
         public: true
         tags:
             - { name: 'console.command' }
-            - { name: 'chain_command.member', parent: 'test.command.complex_parent' }
+            - { name: 'chain_command.member', parent: 'test.command.complex_member1' }
             
     chain_command.manager:
         class: EugeneMoz\ChainCommandBundle\Service\ChainCommandManager

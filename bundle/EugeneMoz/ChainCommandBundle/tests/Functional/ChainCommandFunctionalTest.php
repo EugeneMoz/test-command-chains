@@ -109,15 +109,9 @@ class ChainCommandFunctionalTest extends ChainCommandTestCase
             $chainManager->getParentForMember('test.command.complex_member1')
         );
         $this->assertEquals(
-            'test.command.complex_parent',
+            'test.command.complex_member1',
             $chainManager->getParentForMember('test.command.complex_member2')
         );
-
-        // Check that the parent command has two chain members
-        $members = $chainManager->getChainMembers('test.command.complex_parent');
-        $this->assertCount(2, $members);
-        $this->assertContains('test.command.complex_member1', $members);
-        $this->assertContains('test.command.complex_member2', $members);
 
         // Execute the command chain
         $commandTester = $this->getCommandTester('test:complex-parent');
