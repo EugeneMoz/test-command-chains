@@ -47,6 +47,14 @@ class CommandDecorator extends Command
     }
 
     /**
+     * Returns the original command instance.
+     */
+    public function getOriginalCommand(): Command
+    {
+        return $this->originalCommand;
+    }
+
+    /**
      * Configures the decorator by copying settings from the original command.
      */
     protected function configure(): void

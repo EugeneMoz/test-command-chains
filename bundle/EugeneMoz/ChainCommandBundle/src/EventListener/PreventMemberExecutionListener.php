@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EugeneMoz\ChainCommandBundle\EventListener;
 
+use EugeneMoz\ChainCommandBundle\Command\CommandDecorator;
 use EugeneMoz\ChainCommandBundle\Service\ChainCommandManager;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\ConsoleEvents;
@@ -19,8 +20,10 @@ class PreventMemberExecutionListener implements EventSubscriberInterface
     private ChainCommandManager $manager;
     private ContainerInterface $container;
 
-    public function __construct(ChainCommandManager $manager, ContainerInterface $container)
-    {
+    public function __construct(
+        ChainCommandManager $manager,
+        ContainerInterface $container
+    ) {
         $this->manager = $manager;
         $this->container = $container;
     }
@@ -38,8 +41,19 @@ class PreventMemberExecutionListener implements EventSubscriberInterface
         if (!$command) {
             return;
         }
-        $commandClass = get_class($command);
 
+        $originalCommand = ($command instanceof CommandDecorator) ? $command->getOriginalCommand() : $command;
+        if (!$originalCommand) {
+            $message = sprintf(
+                'Error: %s command is a member of %s command chain and cannot be executed on its own.',
+                $command->getName(),
+                $originalCommand
+            );
+            // Throw an exception to stop the command execution
+            throw new RuntimeException($message);
+        }
+
+        $commandClass = get_class($originalCommand);
         $commandServiceId = $this->manager->getServiceIdByClassName($commandClass);
         if (!$commandServiceId) {
             return;
