@@ -1,0 +1,73 @@
+framework:
+    test: true
+    secret: "test_secret"
+    router:
+        utf8: true
+        resource: ~
+    http_method_override: false
+    handle_all_throwables: true
+
+monolog:
+    handlers:
+        main:
+            type: stream
+            path: "php://stderr"
+            level: debug
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+        
+    test.command.parent:
+        class: EugeneMoz\ChainCommandBundle\Tests\Functional\Fixtures\TestParentCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+            
+    test.command.member:
+        class: EugeneMoz\ChainCommandBundle\Tests\Functional\Fixtures\TestMemberCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+            - { name: 'chain_command.member', parent: 'test.command.parent' }
+            
+    # Commands for testing execution failures
+    test.command.failing_parent:
+        class: EugeneMoz\ChainCommandBundle\Tests\Functional\Fixtures\TestFailingParentCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+            
+    test.command.failing_member:
+        class: EugeneMoz\ChainCommandBundle\Tests\Functional\Fixtures\TestFailingMemberCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+            - { name: 'chain_command.member', parent: 'test.command.failing_parent' }
+           
+    # сommands for complex testing
+    test.command.complex_parent:
+        class: EugeneMoz\ChainCommandBundle\Tests\Functional\Fixtures\TestComplexParentCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+            
+    test.command.complex_member1:
+        class: EugeneMoz\ChainCommandBundle\Tests\Functional\Fixtures\TestMemberCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+            - { name: 'chain_command.member', parent: 'test.command.complex_parent' }
+            
+    test.command.complex_member2:
+        class: EugeneMoz\ChainCommandBundle\Tests\Functional\Fixtures\TestSecondMemberCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+            - { name: 'chain_command.member', parent: 'test.command.complex_parent' }
+            
+    chain_command.manager:
+        class: EugeneMoz\ChainCommandBundle\Service\ChainCommandManager
+        public: true

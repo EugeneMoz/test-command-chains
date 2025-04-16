@@ -1,0 +1,8 @@
+monolog:
+  handlers:
+    chain_command:
+      type: rotating_file
+      path: "%kernel.logs_dir%/chain_command.log"
+      level: debug
+      channels: ['chain_command']
+      max_files: 10

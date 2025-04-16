@@ -1,0 +1,19 @@
+parameters:
+
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    EugeneMoz\BarBundle\Command\BarHiCommand:
+        tags:
+            - { name: 'chain_command.member', parent: 'EugeneMoz\FooBundle\Command\FooHelloCommand' }
+        

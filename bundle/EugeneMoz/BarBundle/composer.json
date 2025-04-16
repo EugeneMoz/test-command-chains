@@ -1,0 +1,17 @@
+{
+  "name": "eugenemoz/bar-bundle",
+  "version": "0.0.1",
+  "type": "symfony-bundle",
+  "description": "Test Bar bundle",
+  "license": "MIT",
+  "require": {
+    "php": ">=8.2",
+    "symfony/monolog-bundle": "v3.10.0",
+    "symfony/console": "7.2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "EugeneMoz\\BarBundle\\": "src/"
+    }
+  }
+}
